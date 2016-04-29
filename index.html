@@ -5,6 +5,23 @@
 	<title>Document</title>
 </head>
 <body>
+	<input type="checkbox" id="checkbox" checked="check"></input>
+	<select id="select">
+		<option>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+		<option>5</option>
+	</select>
 	
+	<script type="text/javascript">
+		console.log(document.getElementById('checkbox').checked);
+		var se=document.getElementById('select');
+		console.log('---'+se.options[se.selectedIndex].value);
+		se.addEventListener('change',function(){
+			console.log(se.options[se.selectedIndex].value);
+			console.log(se.options[se.selectedIndex].text);
+		},false);
+	</script>
 </body>
 </html>
