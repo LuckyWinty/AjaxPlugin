@@ -17,11 +17,12 @@
 	<script type="text/javascript">
 		console.log(document.getElementById('checkbox').checked);
 		var se=document.getElementById('select');
-		console.log('---'+se.options[se.selectedIndex].value);
 		se.addEventListener('change',function(){
 			console.log(se.options[se.selectedIndex].value);
 			console.log(se.options[se.selectedIndex].text);
 		},false);
 	</script>
+	<script type="text/javascript" src="js/ajaxPlugin.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
 </body>
 </html>
