@@ -10,7 +10,10 @@
 		};
 		console.log(this);
 		this.start(params);
-	}
+	};
+	Ajax.init=function(params){
+		new Ajax(params);
+	},
 	Ajax.prototype={
 		createXHR:function(){
 			if(typeof XMLHttpRequest!='undefined'){
@@ -36,7 +39,7 @@
 		start:function(params){
 			var xhr=new this.createXHR();
 			if(params.url){
-				this.defaultConfig.url=url;
+				this.defaultConfig.url=params.url;
 			}else{
 				console.log("url cannot be null!");
 			}
@@ -58,7 +61,7 @@
 			if(params.error){
 				this.defaultConfig.error=error;
 			}
-			if(this.defaultConfig.type=="GET"||this.defaultConfig.type=="get"){
+			if((this.defaultConfig.type=="GET")||(this.defaultConfig.type=="get")){
 				for(var item in this.defaultConfig.data){
 					this.defaultConfig.url=addURLParam(this.defaultConfig.url,item,this.defaultConfig.data[item]);
 				}
@@ -86,10 +89,10 @@
 
 		}
 	}
-	window["Ajax"]=Ajax;
 	function addURLParam(url,name,value){
 		url+=(url.indexOf("?")==-1 ? "?" : "&");
 		url+=encodeURIComponent(name)+"="+encodeURIComponent(value);
 		return url;
 	}
-})()
+	window["Ajax"]=Ajax;
+})();

@@ -1,9 +1,8 @@
 window.onload=function(){
 	console.log("start");
-	Ajax({
-		url:"../json/data.json",
+     Ajax.init({
+		url:"data.json",
 		type:"get",
-
 		success:function(data){
 			console.log(data);
 		}
