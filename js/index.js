@@ -2,7 +2,8 @@ window.onload=function(){
 	console.log("start");
      Ajax.init({
 		url:"data.json",
-		type:"get",
+		type:"post",
+		data:{"help":"me","to":"die"},
 		success:function(data){
 			console.log(data);
 		}
