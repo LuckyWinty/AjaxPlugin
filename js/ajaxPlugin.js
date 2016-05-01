@@ -52,6 +52,7 @@
 			if(params.datatype){
 				this.defaultConfig.async=params.datatype;
 			}
+			//增加是否跨域判断
 			if(params.data){
 				this.defaultConfig.data=params.data;
 				console.log(this.defaultConfig.data);
