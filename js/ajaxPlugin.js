@@ -52,10 +52,8 @@
 			if(params.datatype){
 				this.defaultConfig.async=params.datatype;
 			}
-			//增加是否跨域判断
 			if(params.data){
 				this.defaultConfig.data=params.data;
-				console.log(this.defaultConfig.data);
 			}
 			if(params.success){
 				this.defaultConfig.success=params.success;
@@ -63,22 +61,35 @@
 			if(params.error){
 				this.defaultConfig.error=error;
 			}
-			if((this.defaultConfig.type=="GET")||(this.defaultConfig.type=="get")){
-				for(var item in this.defaultConfig.data){
-					this.defaultConfig.url=addURLParam(this.defaultConfig.url,item,this.defaultConfig.data[item]);
+			if(this.defaultConfig.type=="json"||this.defaultConfig.type=="JSON"){//非跨域
+				if((this.defaultConfig.type=="GET")||(this.defaultConfig.type=="get")){
+					for(var item in this.defaultConfig.data){
+						this.defaultConfig.url=addURLParam(this.defaultConfig.url,item,this.defaultConfig.data[item]);
+					}
+					xhr.addEventListener('onreadystatechange',this.complete);
+					xhr.open(this.defaultConfig.type,this.defaultConfig.url,this.defaultConfig.async);
+					xhr.send(null);
 				}
-				xhr.addEventListener('onreadystatechange',this.complete);
-				xhr.open(this.defaultConfig.type,this.defaultConfig.url,this.defaultConfig.async);
-				xhr.send(null);
-			}
-			if(this.defaultConfig.type=="POST"||this.defaultConfig.type=="post"){
-				xhr.addEventListener('onreadystatechange',this.complete);
-				xhr.open(this.defaultConfig.type,this.defaultConfig.url,this.defaultConfig.async);
-				if(params.contentType){
-					this.defaultConfig.contentType=params.contentType;
+				if(this.defaultConfig.type=="POST"||this.defaultConfig.type=="post"){
+					xhr.addEventListener('onreadystatechange',this.complete);
+					xhr.open(this.defaultConfig.type,this.defaultConfig.url,this.defaultConfig.async);
+					if(params.contentType){
+						this.defaultConfig.contentType=params.contentType;
+					}
+					xhr.setRequestHeader("Content-Type",this.defaultConfig.contentType);
+					xhr.send(serialize(this.defaultConfig.data));
 				}
-				xhr.setRequestHeader("Content-Type",this.defaultConfig.contentType);
-				xhr.send(serialize(this.defaultConfig.data));
+			}else if((this.defaultConfig.type=="jsonp")||(this.defaultConfig.type=="JSONP")){//跨域
+				if((this.defaultConfig.type=="GET")||(this.defaultConfig.type=="get")){
+					for(var item in this.defaultConfig.data){
+						this.defaultConfig.url=addURLParam(this.defaultConfig.url,item,this.defaultConfig.data[item]);
+					}
+					xhr.addEventListener('onreadystatechange',this.complete);
+					xhr.open(this.defaultConfig.type,this.defaultConfig.url,this.defaultConfig.async);
+					xhr.send(null);
+				}
+			}else{
+				console.log("datatype is error!");
 			}
 		},
 		complete:function(){
