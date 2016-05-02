@@ -10,6 +10,7 @@
 		};
 		this.start(params);
 	};
+	var xhr = null;
 	Ajax.init=function(params){
 		new Ajax(params);
 	},
@@ -36,7 +37,7 @@
 			}
 		},
 		start:function(params){
-			var xhr=new this.createXHR();
+			xhr=new this.createXHR();
 			if(params.url){
 				this.config.url=params.url;
 			}else{
@@ -54,17 +55,26 @@
 			if(params.data){
 				this.config.data=params.data;
 			}
+			if(params.success){
+				this.config.success=params.success;
+			}
+			if(params.fail){
+				this.config.fail=params.fail;
+			}
+			if(params.beforeSend){
+				params.beforeSend();
+			}
 			if(this.config.dataType=="json"||this.config.dataType=="JSON"){//非跨域
 				if((this.config.type=="GET")||(this.config.type=="get")){
 					for(var item in this.config.data){
 						this.config.url=addURLParam(this.config.url,item,this.config.data[item]);
 					}
-					xhr.addEventListener('onreadystatechange',this.complete);
+					xhr.onreadystatechange=this.complete;
 					xhr.open(this.config.type,this.config.url,this.config.async);
 					xhr.send(null);
 				}
 				if(this.config.type=="POST"||this.config.type=="post"){
-					xhr.addEventListener('onreadystatechange',this.complete);
+					xhr.addEventListener('readystatechange',this.complete);
 					xhr.open(this.config.type,this.config.url,this.config.async);
 					if(params.contentType){
 						this.config.contentType=params.contentType;
@@ -114,13 +124,13 @@
 		complete:function(){
 			if(xhr.readyState==4){
 				try{
-					if((xhr.status>=200&&xhr.state<300)||xhr.status==304){
-						if(params.success){
-							params.success.success(xhr.responseText);
+					if((xhr.status>=200&&xhr.status<300)||xhr.status==304){
+						if(this.config.success){
+							this.config.success(xhr.responseText);
 						}
 					}else{
-						if(params.fail){
-							params.fail();
+						if(this.config.fail){
+							this.config.fail();
 						}else{
 							throw new Error("Request was unsucessful:"+xhr.status);
 						}
@@ -129,7 +139,7 @@
 					throw new Error("Request did not return in a second.");
 				}
 			}
-		},
+		}
 	}
 	function addURLParam(url,name,value){
 		url+=(url.indexOf("?")==-1 ? "?" : "&");

@@ -1,43 +1,22 @@
 window.onload=function(){
-	console.log("start");
-	Ajax.init({
-		url:"http://localhost:8080/AjaxCROSTest/data.json",
+		Ajax.init({
+		url:"js/data.json",
 		type:"get",
-		dataType:"jsonp",
+		dataType:"json",
 		data:{"help":"me","to":"die"},
-		callback:"test",
-		time:"10",
+		showIndicator: true,
+		beforeSend:function(){
+		},
 		success:function(data){
-			console.log(data);
+			console.log(data)
+			var list="";
+			data.names.forEach(function(item,index,array){
+				list=list+"<li>"+item+"</li>";
+			});
+			document.getElementById('name-list').innerHTML=list;
 		},
 		fail:function(ex){
 			console.log(ex);
 		}
 	});
-	//$.ajax({
-	//	url:"http://localhost:8080/AjaxCROSTest/data.json",
-	//	type:"get",
-	//	dataType:"jsonp",
-	//	data:{},
-	//	success:function(data){
-	//		console.log("ajax-------------------------------------------");
-	//		console.log(data);
-	//	},
-	//	error:function(ex){
-	//		console.log(ex);
-	//	}
-	//});
-	//$.ajax({
-	//	type: "get",
-	//	url: "http://localhost:8080/AjaxCROSTest/data.json",
-	//	dataType: "jsonp",
-	//	data: {
-	//	},
-	//	beforeSend: function(xhr) {
-	//	},
-	//	success: function(data) {
-	//		console.log("--------------"+data);
-    //
-	//	}
-	//});
 }
