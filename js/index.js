@@ -4,16 +4,12 @@ window.onload=function(){
 		type:"get",
 		dataType:"jsonp",
 		data:{"help":"me","to":"die"},
-		callback:"123",
+		callback:"callback",
 		beforeSend:function(){
+			//...
 		},
 		success:function(data){
-			console.log(data)
-			var list="";
-			data.names.forEach(function(item,index,array){
-				list=list+"<li>"+item+"</li>";
-			});
-			document.getElementById('name-list').innerHTML=list;
+			//...
 		},
 		fail:function(ex){
 			console.log(ex);

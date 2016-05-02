@@ -2,7 +2,7 @@
 	var Ajax=function(params){
 		this.config={
 			url:"",
-			type:"post",
+			type:"get",
 			async:true,
 			dataType:"json",
 			contentType:"application/x-www-form-urlencoded; charset=UTF-8",
