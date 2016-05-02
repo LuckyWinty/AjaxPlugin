@@ -2,7 +2,7 @@
 	var Ajax=function(params){
 		this.config={
 			url:"",
-			type:"GET",
+			type:"post",
 			async:true,
 			dataType:"json",
 			contentType:"application/x-www-form-urlencoded; charset=UTF-8",
@@ -13,8 +13,9 @@
 	var xhr = null;
 	Ajax.init=function(params){
 		new Ajax(params);
-	},
+	};
 	Ajax.prototype={
+		constructor: Ajax,
 		createXHR:function(){
 			if(typeof XMLHttpRequest!='undefined'){
 				return new XMLHttpRequest();
@@ -64,17 +65,34 @@
 			if(params.beforeSend){
 				params.beforeSend();
 			}
+
+			var complete=function(){
+				if(xhr.readyState==4){
+						if((xhr.status>=200&&xhr.status<300)||xhr.status==304){
+							if(params.success){
+								params.success(xhr.responseText);
+							}
+						}else{
+							if(params.fail){
+								params.fail();
+							}else{
+								throw new Error("Request was unsucessful:"+xhr.status);
+							}
+						}
+				}
+			}
+
 			if(this.config.dataType=="json"||this.config.dataType=="JSON"){//非跨域
 				if((this.config.type=="GET")||(this.config.type=="get")){
 					for(var item in this.config.data){
 						this.config.url=addURLParam(this.config.url,item,this.config.data[item]);
 					}
-					xhr.onreadystatechange=this.complete;
+					xhr.onreadystatechange=complete;
 					xhr.open(this.config.type,this.config.url,this.config.async);
 					xhr.send(null);
 				}
 				if(this.config.type=="POST"||this.config.type=="post"){
-					xhr.addEventListener('readystatechange',this.complete);
+					xhr.addEventListener('readystatechange',complete);
 					xhr.open(this.config.type,this.config.url,this.config.async);
 					if(params.contentType){
 						this.config.contentType=params.contentType;
@@ -119,25 +137,6 @@
 				}
 			}else{
 				throw new Error("dataType is error!");
-			}
-		},
-		complete:function(){
-			if(xhr.readyState==4){
-				try{
-					if((xhr.status>=200&&xhr.status<300)||xhr.status==304){
-						if(this.config.success){
-							this.config.success(xhr.responseText);
-						}
-					}else{
-						if(this.config.fail){
-							this.config.fail();
-						}else{
-							throw new Error("Request was unsucessful:"+xhr.status);
-						}
-					}
-				}catch(ex){
-					throw new Error("Request did not return in a second.");
-				}
 			}
 		}
 	}

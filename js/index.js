@@ -1,10 +1,10 @@
 window.onload=function(){
 		Ajax.init({
-		url:"js/data.json",
+		url:"http://localhost:8080/AjaxCROSTest/data.json",
 		type:"get",
-		dataType:"json",
+		dataType:"jsonp",
 		data:{"help":"me","to":"die"},
-		showIndicator: true,
+		callback:"123",
 		beforeSend:function(){
 		},
 		success:function(data){
