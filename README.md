@@ -1,8 +1,9 @@
 # AjaxPlugin
 This is a ajax tool which had been encapsulated using Native Javascript by myself.
 ##Introduction
-    This plugin supported two types of request,Cross domain request and Same domain request.The Same domain request only 
-    supported the request "GET" and "POST" .And the  Cross domain request only supported "GET" request of jsonp.
+    This plugin supported two types of request,Cross domain request and Same domain request.
+    The Same domain request only supported the request "GET" and "POST" .
+    And the  Cross domain request only supported "GET" request of jsonp.
     
 ###Tutorial
 At first,you must import this plugin to you html file.
