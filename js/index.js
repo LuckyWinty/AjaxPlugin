@@ -5,6 +5,7 @@ window.onload=function(){
 		dataType:"jsonp",
 		data:{"help":"me","to":"die"},
 		callback:"callback",
+			time:"1000",
 		beforeSend:function(){
 			//...
 		},
