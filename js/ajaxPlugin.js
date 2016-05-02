@@ -1,14 +1,13 @@
 ;(function(){
 	var Ajax=function(params){
-		this.defaultConfig={
+		this.config={
 			url:"",
 			type:"GET",
 			async:true,
-			datatype:"json",
+			dataType:"json",
 			contentType:"application/x-www-form-urlencoded; charset=UTF-8",
 			data:{}
 		};
-		console.log(this);
 		this.start(params);
 	};
 	Ajax.init=function(params){
@@ -39,75 +38,95 @@
 		start:function(params){
 			var xhr=new this.createXHR();
 			if(params.url){
-				this.defaultConfig.url=params.url;
+				this.config.url=params.url;
 			}else{
-				console.log("url cannot be null!");
+				throw new Error("url cannot be null!");
 			}
 			if(params.type){
-				this.defaultConfig.type=params.type;
+				this.config.type=params.type;
 			}
 			if(params.async){
-				this.defaultConfig.async=params.async;
+				this.config.async=params.async;
 			}
-			if(params.datatype){
-				this.defaultConfig.async=params.datatype;
+			if(params.dataType){
+				this.config.dataType=params.dataType;
 			}
 			if(params.data){
-				this.defaultConfig.data=params.data;
+				this.config.data=params.data;
 			}
-			if(params.success){
-				this.defaultConfig.success=params.success;
-			}
-			if(params.error){
-				this.defaultConfig.error=error;
-			}
-			if(this.defaultConfig.type=="json"||this.defaultConfig.type=="JSON"){//非跨域
-				if((this.defaultConfig.type=="GET")||(this.defaultConfig.type=="get")){
-					for(var item in this.defaultConfig.data){
-						this.defaultConfig.url=addURLParam(this.defaultConfig.url,item,this.defaultConfig.data[item]);
+			if(this.config.dataType=="json"||this.config.dataType=="JSON"){//非跨域
+				if((this.config.type=="GET")||(this.config.type=="get")){
+					for(var item in this.config.data){
+						this.config.url=addURLParam(this.config.url,item,this.config.data[item]);
 					}
 					xhr.addEventListener('onreadystatechange',this.complete);
-					xhr.open(this.defaultConfig.type,this.defaultConfig.url,this.defaultConfig.async);
+					xhr.open(this.config.type,this.config.url,this.config.async);
 					xhr.send(null);
 				}
-				if(this.defaultConfig.type=="POST"||this.defaultConfig.type=="post"){
+				if(this.config.type=="POST"||this.config.type=="post"){
 					xhr.addEventListener('onreadystatechange',this.complete);
-					xhr.open(this.defaultConfig.type,this.defaultConfig.url,this.defaultConfig.async);
+					xhr.open(this.config.type,this.config.url,this.config.async);
 					if(params.contentType){
-						this.defaultConfig.contentType=params.contentType;
+						this.config.contentType=params.contentType;
 					}
-					xhr.setRequestHeader("Content-Type",this.defaultConfig.contentType);
-					xhr.send(serialize(this.defaultConfig.data));
+					xhr.setRequestHeader("Content-Type",this.config.contentType);
+					xhr.send(serialize(this.config.data));
 				}
-			}else if((this.defaultConfig.type=="jsonp")||(this.defaultConfig.type=="JSONP")){//跨域
-				if((this.defaultConfig.type=="GET")||(this.defaultConfig.type=="get")){
-					for(var item in this.defaultConfig.data){
-						this.defaultConfig.url=addURLParam(this.defaultConfig.url,item,this.defaultConfig.data[item]);
+			}else if((this.config.dataType=="jsonp")||(this.config.dataType=="JSONP")){//跨域
+				if((this.config.type=="GET")||(this.config.type=="get")){//jsonp只能进行get请求跨域
+					if(!params.url||!params.callback){
+						throw new Error("params is illegal!");
+					}else{
+						this.config.callback=params.callback;
 					}
-					xhr.addEventListener('onreadystatechange',this.complete);
-					xhr.open(this.defaultConfig.type,this.defaultConfig.url,this.defaultConfig.async);
-					xhr.send(null);
+					//创建script标签
+					var cbName='callback';
+					var head=document.getElementsByTagName('head')[0];
+					this.config[this.config.callback]=cbName;
+					var scriptTag=document.createElement('script');
+					head.appendChild(scriptTag);
+
+					//创建jsonp的回调函数
+					window[cbName]=function(json){
+						head.removeChild(scriptTag);
+						clearTimeout(scriptTag.timer);
+						window[cbName]=null;
+						params.success&&params.success(json);
+					};
+					//超时处理
+					if(params.time){
+						scriptTag.timer=setTimeout(function(){
+							head.removeChild(scriptTag);
+							params.fail&&params.fail({message:"over time"});
+							window[cbName]=null;
+						},params.time);
+					}
+					this.config.url=this.config.url+"?callback="+cbName;
+					for(var item in this.config.data){
+						this.config.url=addURLParam(this.config.url,item,this.config.data[item]);
+					}
+                    scriptTag.src=this.config.url;
 				}
 			}else{
-				console.log("datatype is error!");
+				throw new Error("dataType is error!");
 			}
 		},
 		complete:function(){
 			if(xhr.readyState==4){
 				try{
 					if((xhr.status>=200&&xhr.state<300)||xhr.status==304){
-						if(this.defaultConfig.success){
-							this.defaultConfig.success(xhr.responseText);
+						if(params.success){
+							params.success.success(xhr.responseText);
 						}
 					}else{
-						if(this.defaultConfig.error){
-							this.defaultConfig.error();
+						if(params.fail){
+							params.fail();
 						}else{
-							console.log("Request was unsucessful:"+xhr.status);
+							throw new Error("Request was unsucessful:"+xhr.status);
 						}
 					}
 				}catch(ex){
-					console.log("Request did not return in a second.");
+					throw new Error("Request did not return in a second.");
 				}
 			}
 		},
