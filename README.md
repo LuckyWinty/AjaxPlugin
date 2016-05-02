@@ -46,10 +46,11 @@ At first,you must import this plugin to you html file.
 #####Usage
 	    	Ajax.init({
     		url:"http://localhost:8080/AjaxCROSTest/data.json",
-		    type:"get",//The type must be get
+		type:"get",//The type must be get
     		dataType:"jsonp",//The dataType must be jsonp
     		data:{"name":"winty","lastName":"chou"}, //Pass to the back-end parameters
     		callback:"callback",	//callback function name
+    		time:"1000"//request time,over this time,the request will quit
 	    	beforeSend:function(){
     		},
 	    	success:function(data){
