@@ -11,6 +11,7 @@ At first,you must import this plugin to you html file.
 #### Same domain request
 
 ##### Default params
+```js
     this.config={
 		    	url:"",
     			type:"get",
@@ -19,7 +20,9 @@ At first,you must import this plugin to you html file.
 	    		contentType:"application/x-www-form-urlencoded; charset=UTF-8",
     			data:{}
     		};
+```
 ##### Usage
+```js
     		Ajax.init({
     		url:"js/data.json",
     		type:"get",
@@ -33,8 +36,10 @@ At first,you must import this plugin to you html file.
 		    	console.log(ex);
     		}
     	});
+```
 #### Cross domain request
 ##### Default params
+```js
     this.config={
 		    	url:"",
     			type:"get",
@@ -43,7 +48,9 @@ At first,you must import this plugin to you html file.
 	    		contentType:"application/x-www-form-urlencoded; charset=UTF-8",
     			data:{}
     		};
+```
 ##### Usage
+```js
 	    	Ajax.init({
     		url:"http://localhost:8080/AjaxCROSTest/data.json",
 		    type:"get",//The type must be get
@@ -59,3 +66,4 @@ At first,you must import this plugin to you html file.
     			console.log(ex);
     		}
 	    });
+```
