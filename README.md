@@ -5,12 +5,12 @@ This is a ajax tool which had been encapsulated using Native Javascript by mysel
     The Same domain request only supported the request "GET" and "POST" .
     And the  Cross domain request only supported "GET" request of jsonp.
     
-###Tutorial
+### Tutorial
 At first,you must import this plugin to you html file.
 
-####Same domain request
+#### Same domain request
 
-#####Default params
+##### Default params
     this.config={
 		    	url:"",
     			type:"get",
@@ -19,7 +19,7 @@ At first,you must import this plugin to you html file.
 	    		contentType:"application/x-www-form-urlencoded; charset=UTF-8",
     			data:{}
     		};
-#####Usage
+##### Usage
     		Ajax.init({
     		url:"js/data.json",
     		type:"get",
@@ -33,8 +33,8 @@ At first,you must import this plugin to you html file.
 		    	console.log(ex);
     		}
     	});
-####Cross domain request
-#####Default params
+#### Cross domain request
+##### Default params
     this.config={
 		    	url:"",
     			type:"get",
@@ -43,7 +43,7 @@ At first,you must import this plugin to you html file.
 	    		contentType:"application/x-www-form-urlencoded; charset=UTF-8",
     			data:{}
     		};
-#####Usage
+##### Usage
 	    	Ajax.init({
     		url:"http://localhost:8080/AjaxCROSTest/data.json",
 		    type:"get",//The type must be get
